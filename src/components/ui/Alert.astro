@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"div"> {
+  message: string;
+  classState?: string;
+  id: string;
+  backgroundColor?: string;
+  textColor?: string;
+}
+
+const { message, classState, id, backgroundColor, textColor, ...props } =
+  Astro.props;
+---
+
+<div
+  {...props}
+  class={`fixed inset-0 bg-black/50 flex items-center justify-center ${classState} z-50`}
+  id={id}
+>
+  <div
+    class={`p-4 rounded-lg border-2 flex items-center justify-center ${backgroundColor} ${textColor}`}
+  >
+    <p>{message}</p>
+  </div>
+</div>

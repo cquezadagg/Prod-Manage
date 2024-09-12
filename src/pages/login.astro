@@ -1,0 +1,104 @@
+---
+import Input from "@ui/Input.astro";
+import Button from "@ui/Button.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Alert from "@ui/Alert.astro";
+---
+
+<BaseLayout title="Transportes J&F | Iniciar Sesión">
+  <header class="shadow-sm text-center font-bold text-2xl text-black">
+    Transportes J&F
+  </header>
+  <main>
+    <div
+      class="min-h-screen bg-gradient-to-b from-[#133987] to-[#6C87BE] flex items-center justify-center p-4"
+    >
+      <div
+        class="max-w-md w-full bg-zinc-50 rounded-lg shadow-xl overflow-hidden"
+      >
+        <div class="p-6">
+          <div class="flex justify-center mb-8">
+            <!-- TODO: logo -->
+          </div>
+          <h1 class="text-3xl font-bold text-center mb-2">Iniciar Sesión</h1>
+
+          <Alert
+            id="error-message"
+            classState="hidden z-50"
+            message="No se pudo iniciar sesión"
+            backgroundColor="bg-red-300"
+            textColor="text-red-800"
+          />
+
+          <Alert
+            id="success-message"
+            classState="hidden"
+            message="Sesión iniciada con éxito"
+            backgroundColor="bg-green-300"
+            textColor="text-green-800"
+          />
+
+          <form class="space-y-6" id="login-account">
+            <Input
+              name="email"
+              label="Ingresa tu correo"
+              type="email"
+              placeholder="tu@empresa.com"
+            />
+            <Input
+              name="password"
+              label="Ingresa tu contraseña"
+              type="password"
+              placeholder="••••••••"
+            />
+            <div class="flex justify-center">
+              <Button buttonText="Ingresar" type="submit" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    import { actions, isInputError } from "astro:actions";
+
+    const loginForm = document.querySelector(
+      "#login-account",
+    ) as HTMLFormElement;
+    const errorMessage = document.querySelector("#error-message");
+    const successMessage = document.querySelector("#success-message");
+
+    loginForm?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorMessage?.classList.add("hidden");
+      successMessage?.classList.add("hidden");
+
+      const { error } = await actions.loginAccount(new FormData(loginForm));
+
+      if (error) {
+        console.log(error);
+        errorMessage?.classList.remove("hidden");
+
+        if (isInputError(error)) {
+          console.log(error.fields);
+        }
+
+        setTimeout(() => {
+          errorMessage?.classList.add("hidden");
+        }, 3000);
+        return;
+      }
+
+      successMessage?.classList.remove("hidden");
+
+      setTimeout(() => {
+        successMessage?.classList.add("hidden");
+      }, 3000);
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    });
+  </script>
+</BaseLayout>

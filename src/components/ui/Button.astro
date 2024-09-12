@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"button"> {
+  buttonText: string;
+}
+
+const { buttonText, ...props } = Astro.props;
+---
+
+<button
+  {...props}
+  class="rounded-lg bg-sky-400 p-4 text-white hover:bg-sky-700 transition-all duration-200 ease-in-out"
+>
+  {buttonText}
+</button>
